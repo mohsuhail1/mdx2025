@@ -3,7 +3,7 @@
 #include <Wire.h>
 int waterSensorPin = A0;   // Water sensor 
 int servoPin = 10;         // Servo Motor
-int waterThreshold = 600;  // Threshold for the servo motor to move
+int waterThreshold = 600;  // Setting a minimum threshold for actuation
 
 Servo Myservo;
 bool servomovement = false; 
@@ -13,13 +13,13 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 void setup() {
   pinMode(waterSensorPin, INPUT);
   Myservo.attach(servoPin);
-  Serial.begin(9600); 
-  lcd.init();
+  Serial.begin(9600);
+  lcd.init(); // initializing lcd display
   lcd.backlight();
   lcd.clear();
   lcd.setCursor(3, 0);
   lcd.print("Clear");
-  Myservo.write(0);
+  Myservo.write(0); // Once the system is powered, the angle of the servo motor will be set to 0 degrees, which is facing outside.
 }
 
 void loop() {
@@ -28,7 +28,7 @@ void loop() {
   Serial.println(sensorValue);  // Print the moisture level to the Serial Monitor
   if (sensorValue >= waterThreshold ) {
     if (!servomovement) {
-      for (int pos = 0; pos <= 90; pos++) {
+      for (int pos = 0; pos <= 90; pos++) { // Moving the servo motor in increments to slow down the movement
         lcd.clear();
         lcd.setCursor(2, 1);
         lcd.print("RAIN!!!!!");
